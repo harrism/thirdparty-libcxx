@@ -20,7 +20,6 @@
 
 #include "test_macros.h"
 
-
 template <class T, size_t Size>
 struct MyArray {
   T elems[Size];
@@ -34,7 +33,7 @@ void test() {
   static_assert(sizeof(ArrayT) == sizeof(CArrayT), "");
   static_assert(sizeof(ArrayT) == sizeof(MyArrayT), "");
   static_assert(TEST_ALIGNOF(ArrayT) == TEST_ALIGNOF(MyArrayT), "");
-#if defined(_LIBCPP_VERSION)
+#if defined(_LIBCUDACXX_VERSION)
   ArrayT a;
   ((void)a);
   static_assert(sizeof(ArrayT) == sizeof(a.__elems_), "");
@@ -49,9 +48,7 @@ void test_type() {
   test<T, 0>();
 }
 
-struct TEST_ALIGNAS(TEST_ALIGNOF(std::max_align_t) * 2) TestType1 {
-
-};
+struct TEST_ALIGNAS(TEST_ALIGNOF(std::max_align_t) * 2) TestType1 {};
 
 struct TEST_ALIGNAS(TEST_ALIGNOF(std::max_align_t) * 2) TestType2 {
   char data[1000];

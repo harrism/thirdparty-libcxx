@@ -26,95 +26,101 @@
 
 #if TEST_STD_VER < 14
 
-# ifdef __cpp_lib_atomic_is_always_lock_free
-#   error "__cpp_lib_atomic_is_always_lock_free should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_atomic_is_always_lock_free
+#error "__cpp_lib_atomic_is_always_lock_free should not be defined before c++17"
+#endif
 
-# ifdef __cpp_lib_atomic_ref
-#   error "__cpp_lib_atomic_ref should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_atomic_ref
+#error "__cpp_lib_atomic_ref should not be defined before c++2a"
+#endif
 
-# ifdef __cpp_lib_char8_t
-#   error "__cpp_lib_char8_t should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_char8_t
+#error "__cpp_lib_char8_t should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER == 14
 
-# ifdef __cpp_lib_atomic_is_always_lock_free
-#   error "__cpp_lib_atomic_is_always_lock_free should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_atomic_is_always_lock_free
+#error "__cpp_lib_atomic_is_always_lock_free should not be defined before c++17"
+#endif
 
-# ifdef __cpp_lib_atomic_ref
-#   error "__cpp_lib_atomic_ref should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_atomic_ref
+#error "__cpp_lib_atomic_ref should not be defined before c++2a"
+#endif
 
-# ifdef __cpp_lib_char8_t
-#   error "__cpp_lib_char8_t should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_char8_t
+#error "__cpp_lib_char8_t should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER == 17
 
-# if !defined(_LIBCPP_HAS_NO_THREADS)
-#   ifndef __cpp_lib_atomic_is_always_lock_free
-#     error "__cpp_lib_atomic_is_always_lock_free should be defined in c++17"
-#   endif
-#   if __cpp_lib_atomic_is_always_lock_free != 201603L
-#     error "__cpp_lib_atomic_is_always_lock_free should have the value 201603L in c++17"
-#   endif
-# else
-#   ifdef __cpp_lib_atomic_is_always_lock_free
-#     error "__cpp_lib_atomic_is_always_lock_free should not be defined when !defined(_LIBCPP_HAS_NO_THREADS) is not defined!"
-#   endif
-# endif
+#if !defined(_LIBCPP_HAS_NO_THREADS)
+#ifndef __cpp_lib_atomic_is_always_lock_free
+#error "__cpp_lib_atomic_is_always_lock_free should be defined in c++17"
+#endif
+#if __cpp_lib_atomic_is_always_lock_free != 201603L
+#error                                                                         \
+    "__cpp_lib_atomic_is_always_lock_free should have the value 201603L in c++17"
+#endif
+#else
+#ifdef __cpp_lib_atomic_is_always_lock_free
+#error                                                                         \
+    "__cpp_lib_atomic_is_always_lock_free should not be defined when !defined(_LIBCPP_HAS_NO_THREADS) is not defined!"
+#endif
+#endif
 
-# ifdef __cpp_lib_atomic_ref
-#   error "__cpp_lib_atomic_ref should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_atomic_ref
+#error "__cpp_lib_atomic_ref should not be defined before c++2a"
+#endif
 
-# ifdef __cpp_lib_char8_t
-#   error "__cpp_lib_char8_t should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_char8_t
+#error "__cpp_lib_char8_t should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER > 17
 
-# if !defined(_LIBCPP_HAS_NO_THREADS)
-#   ifndef __cpp_lib_atomic_is_always_lock_free
-#     error "__cpp_lib_atomic_is_always_lock_free should be defined in c++2a"
-#   endif
-#   if __cpp_lib_atomic_is_always_lock_free != 201603L
-#     error "__cpp_lib_atomic_is_always_lock_free should have the value 201603L in c++2a"
-#   endif
-# else
-#   ifdef __cpp_lib_atomic_is_always_lock_free
-#     error "__cpp_lib_atomic_is_always_lock_free should not be defined when !defined(_LIBCPP_HAS_NO_THREADS) is not defined!"
-#   endif
-# endif
+#if !defined(_LIBCPP_HAS_NO_THREADS)
+#ifndef __cpp_lib_atomic_is_always_lock_free
+#error "__cpp_lib_atomic_is_always_lock_free should be defined in c++2a"
+#endif
+#if __cpp_lib_atomic_is_always_lock_free != 201603L
+#error                                                                         \
+    "__cpp_lib_atomic_is_always_lock_free should have the value 201603L in c++2a"
+#endif
+#else
+#ifdef __cpp_lib_atomic_is_always_lock_free
+#error                                                                         \
+    "__cpp_lib_LIBCUDACXX_VERSIONys_lock_free should not be defined when !defined(_LIBCPP_HAS_NO_THREADS) is not defined!"
+#endif
+#endif
 
-# if !defined(_LIBCPP_VERSION)
-#   ifndef __cpp_lib_atomic_ref
-#     error "__cpp_lib_atomic_ref should be defined in c++2a"
-#   endif
-#   if __cpp_lib_atomic_ref != 201806L
-#     error "__cpp_lib_atomic_ref should have the value 201806L in c++2a"
-#   endif
-# else // _LIBCPP_VERSION
-#   ifdef __cpp_lib_atomic_ref
-#     error "__cpp_lib_atomic_ref should not be defined because it is unimplemented in libc++!"
-#   endif
-# endif
+#if !defined(_LIBCUDACXX_VERSION)
+#ifndef __cpp_lib_atomic_ref
+#error "__cpp_lib_atomic_ref should be defined in c++2a"
+#endif_LIBCUDACXX_VERSION
+#if __cpp_lib_atomic_ref != 201806L
+#error "__cpp_lib_atomic_ref should have the value 201806L in c++2a"
+#endif
+#else // _LIBCUDACXX_VERSION
+#ifdef __cpp_lib_atomic_ref
+#error                                                                         \
+    "__cpp_lib_atomic_ref should not be defined because it is unimplemented in libc++!"
+#endif
+#endif
 
-# if defined(__cpp_char8_t)
-#   ifndef __cpp_lib_char8_t
-#     error "__cpp_lib_char8_t should be defined in c++2a"
-#   endif
-#   if __cpp_lib_char8_t != 201811L
-#     error "__cpp_lib_char8_t should have the value 201811L in c++2a"
-#   endif
-# else
-#   ifdef __cpp_lib_char8_t
-#     error "__cpp_lib_char8_t should not be defined when defined(__cpp_char8_t) is not defined!"
-#   endif
-# endif
+#if defined(__cpp_char8_t)
+#ifndef __cpp_lib_char8_t
+#error "__cpp_lib_char8_t should be defined in c++2a"
+#endif
+#if __cpp_lib_char8_t != 201811L
+#error "__cpp_lib_char8_t should have the value 201811L in c++2a"
+#endif
+#else
+#ifdef __cpp_lib_char8_t
+#error                                                                         \
+    "__cpp_lib_char8_t should not be defined when defined(__cpp_char8_t) is not defined!"
+#endif
+#endif
 
 #endif // TEST_STD_VER > 17
 

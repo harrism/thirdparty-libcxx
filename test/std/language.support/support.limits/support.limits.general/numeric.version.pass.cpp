@@ -24,86 +24,88 @@
 
 #if TEST_STD_VER < 14
 
-# ifdef __cpp_lib_gcd_lcm
-#   error "__cpp_lib_gcd_lcm should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_gcd_lcm
+#error "__cpp_lib_gcd_lcm should not be defined before c++17"
+#endif
 
-# ifdef __cpp_lib_interpolate
-#   error "__cpp_lib_interpolate should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_interpolate
+#error "__cpp_lib_interpolate should not be defined before c++2a"
+#endif
 
-# ifdef __cpp_lib_parallel_algorithm
-#   error "__cpp_lib_parallel_algorithm should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_parallel_algorithm
+#error "__cpp_lib_parallel_algorithm should not be defined before c++17"
+#endif
 
 #elif TEST_STD_VER == 14
 
-# ifdef __cpp_lib_gcd_lcm
-#   error "__cpp_lib_gcd_lcm should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_gcd_lcm
+#error "__cpp_lib_gcd_lcm should not be defined before c++17"
+#endif
 
-# ifdef __cpp_lib_interpolate
-#   error "__cpp_lib_interpolate should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_interpolate
+#error "__cpp_lib_interpolate should not be defined before c++2a"
+#endif
 
-# ifdef __cpp_lib_parallel_algorithm
-#   error "__cpp_lib_parallel_algorithm should not be defined before c++17"
-# endif
+#ifdef __cpp_lib_parallel_algorithm
+#error "__cpp_lib_parallel_algorithm should not be defined before c++17"
+#endif
 
 #elif TEST_STD_VER == 17
 
-# ifndef __cpp_lib_gcd_lcm
-#   error "__cpp_lib_gcd_lcm should be defined in c++17"
-# endif
-# if __cpp_lib_gcd_lcm != 201606L
-#   error "__cpp_lib_gcd_lcm should have the value 201606L in c++17"
-# endif
+#ifndef __cpp_lib_gcd_lcm
+#error "__cpp_lib_gcd_lcm should be defined in c++17"
+#endif
+#if __cpp_lib_gcd_lcm != 201606L
+#error "__cpp_lib_gcd_lcm should have the value 201606L in c++17"
+#endif
 
-# ifdef __cpp_lib_interpolate
-#   error "__cpp_lib_interpolate should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_interpolate
+#error "__cpp_lib_interpolate should not be defined before c++2a"
+#endif
 
-# if !defined(_LIBCPP_VERSION)
-#   ifndef __cpp_lib_parallel_algorithm
-#     error "__cpp_lib_parallel_algorithm should be defined in c++17"
-#   endif
-#   if __cpp_lib_parallel_algorithm != 201603L
-#     error "__cpp_lib_parallel_algorithm should have the value 201603L in c++17"
-#   endif
-# else // _LIBCPP_VERSION
-#   ifdef __cpp_lib_parallel_algorithm
-#     error "__cpp_lib_parallel_algorithm should not be defined because it is unimplemented in libc++!"
-#   endif
-# endif
+#if !defined(__LIBCUDACXX_VERSIONION)
+#ifndef __cpp_lib_parallel_algorithm
+#error "__cpp_lib_parallel_algorithm should be defined in c++17"
+#endif
+#if __cpp_lib_parallel_algorithm != 201603L
+#error "__cpp_lib_parallel_algorithm should have the value 201603L in c++17"
+#endif
+#else // __LIBCUDACXX_VERSIONION
+#ifdef __cpp_lib_parallel_algorithm
+#error                                                                         \
+    "__cpp_lib_parallel_algorithm should not be defined because it is unimplemented in libc++!"
+#endif
+#endif
 
 #elif TEST_STD_VER > 17
 
-# ifndef __cpp_lib_gcd_lcm
-#   error "__cpp_lib_gcd_lcm should be defined in c++2a"
-# endif
-# if __cpp_lib_gcd_lcm != 201606L
-#   error "__cpp_lib_gcd_lcm should have the value 201606L in c++2a"
-# endif
+#ifndef __cpp_lib_gcd_lcm
+#error "__cpp_lib_gcd_lcm should be defined in c++2a"
+#endif
+#if __cpp_lib_gcd_lcm != 201606L
+#error "__cpp_lib_gcd_lcm should have the value 201606L in c++2a"
+#endif
 
-# ifndef __cpp_lib_interpolate
-#   error "__cpp_lib_interpolate should be defined in c++2a"
-# endif
-# if __cpp_lib_interpolate != 201902L
-#   error "__cpp_lib_interpolate should have the value 201902L in c++2a"
-# endif
-
-# if !defined(_LIBCPP_VERSION)
-#   ifndef __cpp_lib_parallel_algorithm
-#     error "__cpp_lib_parallel_algorithm should be defined in c++2a"
-#   endif
-#   if __cpp_lib_parallel_algorithm != 201603L
-#     error "__cpp_lib_parallel_algorithm should have the value 201603L in c++2a"
-#   endif
-# else // _LIBCPP_VERSION
-#   ifdef __cpp_lib_parallel_algorithm
-#     error "__cpp_lib_parallel_algorithm should not be defined because it is unimplemented in libc++!"
-#   endif
-# endif
+#ifndef __cpp_lib_interpolate
+#error "__cpp_lib_interpolate should be defined in c++2a"
+#endif
+#if __cpp_lib_interpolate != 201902L
+#error "__cpp_lib_interpolate should have the value 201902L in c++2a"
+#endif
+_LIBCUDACXX_VERSION
+#if !defined(_LIBCUDACXX_VERSION)
+#ifndef __cpp_lib_parallel_algorithm
+#error "__cpp_lib_parallel_algorithm should be defined in c++2a"
+#endif
+#if __cpp_lib_parallel_algorithm != 201603L
+#error "__cpp_lib_parallel_algorithm should have the value 201603L in c++2a"
+#endif_LIBCUDACXX_VERSION
+#else // _LIBCUDACXX_VERSION
+#ifdef __cpp_lib_parallel_algorithm
+#error                                                                         \
+    "__cpp_lib_parallel_algorithm should not be defined because it is unimplemented in libc++!"
+#endif
+#endif
 
 #endif // TEST_STD_VER > 17
 

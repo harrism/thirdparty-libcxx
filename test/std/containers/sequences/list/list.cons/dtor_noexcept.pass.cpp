@@ -20,33 +20,31 @@
 #include "test_allocator.h"
 
 template <class T>
-struct some_alloc
-{
-    typedef T value_type;
-    some_alloc(const some_alloc&);
-    ~some_alloc() noexcept(false);
+struct some_alloc {
+  typedef T value_type;
+  some_alloc(const some_alloc&);
+  ~some_alloc() noexcept(false);
 };
 
-int main(int, char**)
-{
-    {
-        typedef std::list<MoveOnly> C;
-        static_assert(std::is_nothrow_destructible<C>::value, "");
-    }
-    {
-        typedef std::list<MoveOnly, test_allocator<MoveOnly>> C;
-        static_assert(std::is_nothrow_destructible<C>::value, "");
-    }
-    {
-        typedef std::list<MoveOnly, other_allocator<MoveOnly>> C;
-        static_assert(std::is_nothrow_destructible<C>::value, "");
-    }
-#if defined(_LIBCPP_VERSION)
-    {
-        typedef std::list<MoveOnly, some_alloc<MoveOnly>> C;
-        static_assert(!std::is_nothrow_destructible<C>::value, "");
-    }
-#endif // _LIBCPP_VERSION
+int main(int, char**) {
+  {
+    typedef std::list<MoveOnly> C;
+    static_assert(std::is_nothrow_destructible<C>::value, "");
+  }
+  {
+    typedef std::list<MoveOnly, test_allocator<MoveOnly> > C;
+    static_assert(std::is_nothrow_destructible<C>::value, "");
+  }
+  {
+    typedef std::list<MoveOnly, other_allocator<MoveOnly> > C;
+    static_assert(std::is_nothrow_destructible<C>::value, "");
+  }
+#if defined(_LIBCUDACXX_VERSION)
+  {
+    typedef std::list<MoveOnly, some_alloc<MoveOnly> > C;
+    static_assert(!std::is_nothrow_destructible<C>::value, "");
+  }
+#endif // _LIBCUDACXX_VERSION
 
   return 0;
 }

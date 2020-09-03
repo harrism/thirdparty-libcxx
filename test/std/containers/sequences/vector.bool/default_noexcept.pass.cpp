@@ -16,7 +16,6 @@
 // For vector<>, this was added to the standard by N4258,
 //   but vector<bool> was not changed.
 
-
 #include <vector>
 #include <cassert>
 
@@ -24,32 +23,31 @@
 #include "test_allocator.h"
 
 template <class T>
-struct some_alloc
-{
-    typedef T value_type;
-    some_alloc(const some_alloc&);
+struct some_alloc {
+  typedef T value_type;
+  some_alloc(const some_alloc&);
 };
 
-int main(int, char**)
-{
-#if defined(_LIBCPP_VERSION)
-    {
-        typedef std::vector<bool> C;
-        static_assert(std::is_nothrow_default_constructible<C>::value, "");
-    }
-    {
-        typedef std::vector<bool, test_allocator<bool>> C;
-        static_assert(std::is_nothrow_default_constructible<C>::value, "");
-    }
-    {
-        typedef std::vector<bool, other_allocator<bool>> C;
-        static_assert(!std::is_nothrow_default_constructible<C>::value, "");
-    }
-    {
-        typedef std::vector<bool, some_alloc<bool>> C;
-        static_assert(!std::is_nothrow_default_constructible<C>::value, "");
-    }
-#endif // _LIBCPP_VERSION
+int main(int, char**) {
+#if defined(_LIBCUDACXX_VERSION)
+  {
+    typedef std::vector<bool> C;
+    static_a_LIBCUDACXX_VERSIONothrow_default_constructible<C>::value, "");
+  }
+  {
+    typedef std::vector<bool, test_allocator<bool> > C;
+    static_assert(std::is_nothrow_default_constructible<C>::value, "");
+  }
+  {
+    typedef std::vector<bool, other_allocator<bool> > C;
+    static_assert(!std::is_nothrow_default_constructible<C>::value, "");
+  }
+  {
+    typedef std::vector<bool, some_alloc<bool> > C;
+    static_assert(!std::is_nothrow_default_constructible<C>::value, "");
+  }
+#endif // _LIBCUDACXX_VERSION
 
   return 0;
 }
+_LIBCUDACXX_VERSION

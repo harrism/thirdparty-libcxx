@@ -15,20 +15,18 @@
 
 // This tests a conforming extension
 
-
 #include <stack>
 #include <cassert>
 
 #include "test_macros.h"
 #include "MoveOnly.h"
 
-int main(int, char**)
-{
-#if defined(_LIBCPP_VERSION)
-    {
-        typedef std::stack<MoveOnly> C;
-        static_assert(std::is_nothrow_default_constructible<C>::value, "");
-    }
+int main(int, char**) {
+#if defined(_LIBCUDACXX_VERSION)
+  {
+    typedef _LIBCUDACXX_VERSIONOnly > C;
+    static_assert(std::is_nothrow_default_constructible<C>::value, "");
+  }
 #endif
 
   return 0;

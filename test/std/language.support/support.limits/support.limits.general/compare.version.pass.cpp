@@ -22,36 +22,37 @@
 
 #if TEST_STD_VER < 14
 
-# ifdef __cpp_lib_three_way_comparison
-#   error "__cpp_lib_three_way_comparison should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_three_way_comparison
+#error "__cpp_lib_three_way_comparison should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER == 14
 
-# ifdef __cpp_lib_three_way_comparison
-#   error "__cpp_lib_three_way_comparison should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_three_way_comparison
+#error "__cpp_lib_three_way_comparison should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER == 17
 
-# ifdef __cpp_lib_three_way_comparison
-#   error "__cpp_lib_three_way_comparison should not be defined before c++2a"
-# endif
+#ifdef __cpp_lib_three_way_comparison
+#error "__cpp_lib_three_way_comparison should not be defined before c++2a"
+#endif
 
 #elif TEST_STD_VER > 17
 
-# if !defined(_LIBCPP_VERSION)
-#   ifndef __cpp_lib_three_way_comparison
-#     error "__cpp_lib_three_way_comparison should be defined in c++2a"
-#   endif
-#   if __cpp_lib_three_way_comparison != 201711L
-#     error "__cpp_lib_three_way_comparison should have the value 201711L in c++2a"
-#   endif
-# else // _LIBCPP_VERSION
-#   ifdef __cpp_lib_three_way_comparison
-#     error "__cpp_lib_three_way_comparison should not be defined because it is unimplemented in libc++!"
-#   endif
-# endif
+#if !defined(__LIBCUDACXX_VERSIONION)
+#ifndef __cpp_lib_three_way_comparison
+#error "__cpp_lib_three_way_comparison should be defined in c++2a"
+#endif
+#if __cpp_lib_three_way_comparison != 201711L
+#error "__cpp_lib_three_way_comparison should have the value 201711L in c++2a"
+#endif
+#else // __LIBCUDACXX_VERSIONION
+#ifdef __cpp_lib_three_way_comparison
+#error                                                                         \
+    "__cpp_lib_three_way_comparison should not be defined because it is unimplemented in libc++!"
+#endif
+#endif
 
 #endif // TEST_STD_VER > 17
 

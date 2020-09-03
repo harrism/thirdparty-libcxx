@@ -10,14 +10,14 @@
 #ifndef SUPPORT_TEST_MACROS_HPP
 #define SUPPORT_TEST_MACROS_HPP
 
-// Attempt to get STL specific macros like _LIBCPP_VERSION using the most
+// Attempt to get STL specific macros like _LIBCUDACXX_VERSION using the most
 // minimal header possible. If we're testing libc++, we should use `<__config>`.
 // If <__config> isn't available, fall back to <ciso646>.
 #ifdef __has_include
-# if __has_include("<__config>")
-#   include <__config>
-#   define TEST_IMP_INCLUDED_HEADER
-# endif
+#if __has_include("<__config>")
+#include <__config>
+#define TEST_IMP_INCLUDED_HEADER
+#endif
 #endif
 #ifndef TEST_IMP_INCLUDED_HEADER
 #include <ciso646>
@@ -61,16 +61,16 @@
 #endif
 
 #if defined(__EDG__)
-# define TEST_COMPILER_EDG
+#define TEST_COMPILER_EDG
 #elif defined(__clang__)
-# define TEST_COMPILER_CLANG
-# if defined(__apple_build_version__)
-#  define TEST_COMPILER_APPLE_CLANG
-# endif
+#define TEST_COMPILER_CLANG
+#if defined(__apple_build_version__)
+#define TEST_COMPILER_APPLE_CLANG
+#endif
 #elif defined(_MSC_VER)
-# define TEST_COMPILER_C1XX
+#define TEST_COMPILER_C1XX
 #elif defined(__GNUC__)
-# define TEST_COMPILER_GCC
+#define TEST_COMPILER_GCC
 #endif
 
 #if defined(__apple_build_version__)
@@ -84,16 +84,16 @@
 
 /* Make a nice name for the standard version */
 #ifndef TEST_STD_VER
-#if  __cplusplus <= 199711L
-# define TEST_STD_VER 3
+#if __cplusplus <= 199711L
+#define TEST_STD_VER 3
 #elif __cplusplus <= 201103L
-# define TEST_STD_VER 11
+#define TEST_STD_VER 11
 #elif __cplusplus <= 201402L
-# define TEST_STD_VER 14
+#define TEST_STD_VER 14
 #elif __cplusplus <= 201703L
-# define TEST_STD_VER 17
+#define TEST_STD_VER 17
 #else
-# define TEST_STD_VER 99    // greater than current standard
+#define TEST_STD_VER 99 // greater than current standard
 // This is deliberately different than _LIBCPP_STD_VER to discourage matching them up.
 #endif
 #endif
@@ -115,21 +115,21 @@
 #define TEST_NOEXCEPT noexcept
 #define TEST_NOEXCEPT_FALSE noexcept(false)
 #define TEST_NOEXCEPT_COND(...) noexcept(__VA_ARGS__)
-# if TEST_STD_VER >= 14
-#   define TEST_CONSTEXPR_CXX14 constexpr
-# else
-#   define TEST_CONSTEXPR_CXX14
-# endif
-# if TEST_STD_VER > 14
-#   define TEST_THROW_SPEC(...)
-# else
-#   define TEST_THROW_SPEC(...) throw(__VA_ARGS__)
-# endif
+#if TEST_STD_VER >= 14
+#define TEST_CONSTEXPR_CXX14 constexpr
+#else
+#define TEST_CONSTEXPR_CXX14
+#endif
+#if TEST_STD_VER > 14
+#define TEST_THROW_SPEC(...)
+#else
+#define TEST_THROW_SPEC(...) throw(__VA_ARGS__)
+#endif
 #else
 #if defined(TEST_COMPILER_CLANG)
-# define TEST_ALIGNOF(...) _Alignof(__VA_ARGS__)
+#define TEST_ALIGNOF(...) _Alignof(__VA_ARGS__)
 #else
-# define TEST_ALIGNOF(...) __alignof(__VA_ARGS__)
+#define TEST_ALIGNOF(...) __alignof(__VA_ARGS__)
 #endif
 #define TEST_ALIGNAS(...) __attribute__((__aligned__(__VA_ARGS__)))
 #define TEST_CONSTEXPR
@@ -144,33 +144,33 @@
 // Note that at this time (July 2018), MacOS X and iOS do NOT.
 // This is cribbed from __config; but lives here as well because we can't assume libc++
 #if __ISO_C_VISIBLE >= 2011 || TEST_STD_VER >= 11
-#  if defined(__FreeBSD__)
+#if defined(__FreeBSD__)
 //  Specifically, FreeBSD does NOT have timespec_get, even though they have all
 //  the rest of C11 - this is PR#38495
-#    define TEST_HAS_C11_FEATURES
-#  elif defined(__Fuchsia__) || defined(__wasi__)
-#    define TEST_HAS_C11_FEATURES
-#    define TEST_HAS_TIMESPEC_GET
-#  elif defined(__linux__)
+#define TEST_HAS_C11_FEATURES
+#elif defined(__Fuchsia__) || defined(__wasi__)
+#define TEST_HAS_C11_FEATURES
+#define TEST_HAS_TIMESPEC_GET
+#elif defined(__linux__)
 // This block preserves the old behavior used by include/__config:
 // _LIBCPP_GLIBC_PREREQ would be defined to 0 if __GLIBC_PREREQ was not
 // available. The configuration here may be too vague though, as Bionic, uClibc,
 // newlib, etc may all support these features but need to be configured.
-#    if defined(TEST_GLIBC_PREREQ)
-#      if TEST_GLIBC_PREREQ(2, 17)
-#        define TEST_HAS_TIMESPEC_GET
-#        define TEST_HAS_C11_FEATURES
-#      endif
-#    elif defined(_LIBCPP_HAS_MUSL_LIBC)
-#      define TEST_HAS_C11_FEATURES
-#      define TEST_HAS_TIMESPEC_GET
-#    endif
-#  elif defined(_WIN32)
-#    if defined(_MSC_VER) && !defined(__MINGW32__)
-#      define TEST_HAS_C11_FEATURES // Using Microsoft's C Runtime library
-#      define TEST_HAS_TIMESPEC_GET
-#    endif
-#  endif
+#if defined(TEST_GLIBC_PREREQ)
+#if TEST_GLIBC_PREREQ(2, 17)
+#define TEST_HAS_TIMESPEC_GET
+#define TEST_HAS_C11_FEATURES
+#endif
+#elif defined(_LIBCPP_HAS_MUSL_LIBC)
+#define TEST_HAS_C11_FEATURES
+#define TEST_HAS_TIMESPEC_GET
+#endif
+#elif defined(_WIN32)
+#if defined(_MSC_VER) && !defined(__MINGW32__)
+#define TEST_HAS_C11_FEATURES // Using Microsoft's C Runtime library
+#define TEST_HAS_TIMESPEC_GET
+#endif
+#endif
 #endif
 
 /* Features that were introduced in C++14 */
@@ -187,21 +187,19 @@
 #if TEST_STD_VER > 17
 #endif
 
-
 #define TEST_ALIGNAS_TYPE(...) TEST_ALIGNAS(TEST_ALIGNOF(__VA_ARGS__))
 
-#if !TEST_HAS_FEATURE(cxx_rtti) && !defined(__cpp_rtti) \
-    && !defined(__GXX_RTTI)
+#if !TEST_HAS_FEATURE(cxx_rtti) && !defined(__cpp_rtti) && !defined(__GXX_RTTI)
 #define TEST_HAS_NO_RTTI
 #endif
 
-#if !TEST_HAS_FEATURE(cxx_exceptions) && !defined(__cpp_exceptions) \
-     && !defined(__EXCEPTIONS)
+#if !TEST_HAS_FEATURE(cxx_exceptions) && !defined(__cpp_exceptions) &&         \
+    !defined(__EXCEPTIONS)
 #define TEST_HAS_NO_EXCEPTIONS
 #endif
 
-#if TEST_HAS_FEATURE(address_sanitizer) || TEST_HAS_FEATURE(memory_sanitizer) || \
-    TEST_HAS_FEATURE(thread_sanitizer)
+#if TEST_HAS_FEATURE(address_sanitizer) ||                                     \
+    TEST_HAS_FEATURE(memory_sanitizer) || TEST_HAS_FEATURE(thread_sanitizer)
 #define TEST_HAS_SANITIZERS
 #endif
 
@@ -211,9 +209,9 @@
 #define TEST_NORETURN [[noreturn]]
 #endif
 
-#if defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION) || \
-  (!(TEST_STD_VER > 14 || \
-    (defined(__cpp_aligned_new) && __cpp_aligned_new >= 201606L)))
+#if defined(_LIBCPP_HAS_NO_ALIGNED_ALLOCATION) ||                              \
+    (!(TEST_STD_VER > 14 ||                                                    \
+       (defined(__cpp_aligned_new) && __cpp_aligned_new >= 201606L)))
 #define TEST_HAS_NO_ALIGNED_ALLOCATION
 #endif
 
@@ -225,7 +223,8 @@
 
 // FIXME: Fix this feature check when either (A) a compiler provides a complete
 // implementation, or (b) a feature check macro is specified
-#if !defined(_MSC_VER) || defined(__clang__) || _MSC_VER < 1920 || _MSVC_LANG <= 201703L
+#if !defined(_MSC_VER) || defined(__clang__) || _MSC_VER < 1920 ||             \
+    _MSVC_LANG <= 201703L
 #define TEST_HAS_NO_SPACESHIP_OPERATOR
 #endif
 
@@ -233,15 +232,15 @@
 #define ASSERT_NOEXCEPT(...)
 #define ASSERT_NOT_NOEXCEPT(...)
 #else
-#define ASSERT_NOEXCEPT(...) \
-    static_assert(noexcept(__VA_ARGS__), "Operation must be noexcept")
+#define ASSERT_NOEXCEPT(...)                                                   \
+  static_assert(noexcept(__VA_ARGS__), "Operation must be noexcept")
 
-#define ASSERT_NOT_NOEXCEPT(...) \
-    static_assert(!noexcept(__VA_ARGS__), "Operation must NOT be noexcept")
+#define ASSERT_NOT_NOEXCEPT(...)                                               \
+  static_assert(!noexcept(__VA_ARGS__), "Operation must NOT be noexcept")
 #endif
 
 /* Macros for testing libc++ specific behavior and extensions */
-#if defined(_LIBCPP_VERSION)
+#if defined(_LIBCUDACXX_VERSION)
 #define LIBCPP_ASSERT(...) assert(__VA_ARGS__)
 #define LIBCPP_STATIC_ASSERT(...) static_assert(__VA_ARGS__)
 #define LIBCPP_ASSERT_NOEXCEPT(...) ASSERT_NOEXCEPT(__VA_ARGS__)
@@ -259,14 +258,18 @@
 
 namespace test_macros_detail {
 template <class T, class U>
-struct is_same { enum { value = 0};} ;
+struct is_same {
+  enum { value = 0 };
+};
 template <class T>
-struct is_same<T, T> { enum {value = 1}; };
+struct is_same<T, T> {
+  enum { value = 1 };
+};
 } // namespace test_macros_detail
 
-#define ASSERT_SAME_TYPE(...) \
-    static_assert((test_macros_detail::is_same<__VA_ARGS__>::value), \
-                 "Types differ unexpectedly")
+#define ASSERT_SAME_TYPE(...)                                                  \
+  static_assert((test_macros_detail::is_same<__VA_ARGS__>::value),             \
+                "Types differ unexpectedly")
 
 #ifndef TEST_HAS_NO_EXCEPTIONS
 #define TEST_THROW(...) throw __VA_ARGS__
@@ -281,9 +284,8 @@ struct is_same<T, T> { enum {value = 1}; };
 
 #if defined(__GNUC__) || defined(__clang__)
 template <class Tp>
-inline
-void DoNotOptimize(Tp const& value) {
-    asm volatile("" : : "r,m"(value) : "memory");
+inline void DoNotOptimize(Tp const& value) {
+  asm volatile("" : : "r,m"(value) : "memory");
 }
 
 template <class Tp>

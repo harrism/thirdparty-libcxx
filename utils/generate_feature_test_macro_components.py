@@ -706,8 +706,8 @@ def produce_version_header():
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef _LIBCPP_VERSIONH
-#define _LIBCPP_VERSIONH
+#ifndef _LIBCUDACXX_VERSIONH
+#define _LIBCUDACXX_VERSIONH
 
 /*
   version synopsis
@@ -734,7 +734,7 @@ def produce_version_header():
 {cxx2a_macros}
 #endif
 
-#endif // _LIBCPP_VERSIONH
+#endif // _LIBCUDACXX_VERSIONH
 """
   return template.format(
       synopsis=produce_version_synopsis().strip(),
@@ -769,14 +769,14 @@ test_types = {
 """,
 
   "unimplemented": """
-# if !defined(_LIBCPP_VERSION)
+# if !defined(_LIBCUDACXX_VERSION)
 #   ifndef {name}
 #     error "{name} should be defined in {std}"
 #   endif
 #   if {name} != {value}
 #     error "{name} should have the value {value} in {std}"
 #   endif
-# else // _LIBCPP_VERSION
+# else // _LIBCUDACXX_VERSION
 #   ifdef {name}
 #     error "{name} should not be defined because it is unimplemented in libc++!"
 #   endif

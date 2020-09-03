@@ -10,16 +10,15 @@
 
 #include <tgmath.h>
 
-#ifndef _LIBCPP_VERSION
-#error _LIBCPP_VERSION not defined
+#ifndef _LIBCUDACXX_VERSION
+#error _LIBCUDACXX_VERSION not defined
 #endif
 
-int main(int, char**)
-{
-    std::complex<double> cd;
-    (void)cd;
-    double x = sin(1.0);
-    (void)x; // to placate scan-build
+int main(int, char**) {
+  std::complex<double> cd;
+  (void)cd;
+  double x = sin(1.0);
+  (void)x; // to placate scan-build
 
   return 0;
 }

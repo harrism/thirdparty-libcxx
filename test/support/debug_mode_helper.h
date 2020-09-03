@@ -14,7 +14,7 @@
 #endif
 
 #include <ciso646>
-#ifndef _LIBCPP_VERSION
+#ifndef _LIBCUDACXX_VERSION
 #error "This header may only be used for libc++ tests"
 #endif
 
@@ -34,7 +34,7 @@
 #include "test_allocator.h"
 
 #if TEST_STD_VER < 11
-# error "C++11 or greater is required to use this header"
+#error "C++11 or greater is required to use this header"
 #endif
 
 struct DebugInfoMatcher {
@@ -42,24 +42,28 @@ struct DebugInfoMatcher {
   static constexpr const char* any_file = "*";
   static constexpr const char* any_msg = "*";
 
-  constexpr DebugInfoMatcher() : is_empty(true), msg(any_msg, __builtin_strlen(any_msg)), file(any_file, __builtin_strlen(any_file)), line(any_line) { }
-  constexpr DebugInfoMatcher(const char* msg, const char* file = any_file, int line = any_line)
-    : is_empty(false), msg(msg, __builtin_strlen(msg)), file(file, __builtin_strlen(file)), line(line) {}
+  constexpr DebugInfoMatcher()
+      : is_empty(true), msg(any_msg, __builtin_strlen(any_msg)),
+        file(any_file, __builtin_strlen(any_file)), line(any_line) {}
+  constexpr DebugInfoMatcher(const char* msg, const char* file = any_file,
+                             int line = any_line)
+      : is_empty(false), msg(msg, __builtin_strlen(msg)),
+        file(file, __builtin_strlen(file)), line(line) {}
 
   bool Matches(std::__libcpp_debug_info const& got) const {
     assert(!empty() && "empty matcher");
 
     if (CheckLineMatches(got.__line_) && CheckFileMatches(got.__file_) &&
         CheckMessageMatches(got.__msg_))
-        return true;
+      return true;
     // Write to stdout because that's the file descriptor captured by the parent
     // process.
     std::cout << "Failed to match debug info!\n"
               << ToString() << "\n"
               << "VS\n"
               << got.what() << "\n";
-      return false;
-    }
+    return false;
+  }
 
   std::string ToString() const {
     std::stringstream ss;
@@ -70,6 +74,7 @@ struct DebugInfoMatcher {
   }
 
   bool empty() const { return is_empty; }
+
 private:
   bool CheckLineMatches(int got_line) const {
     if (line == any_line)
@@ -105,6 +110,7 @@ private:
     // Allow any match
     return true;
   }
+
 private:
   bool is_empty;
   std::string_view msg;
@@ -121,17 +127,23 @@ inline DebugInfoMatcher& GlobalMatcher() {
 
 struct DeathTest {
   enum ResultKind {
-    RK_DidNotDie, RK_MatchFound, RK_MatchFailure, RK_SetupFailure, RK_Unknown
+    RK_DidNotDie,
+    RK_MatchFound,
+    RK_MatchFailure,
+    RK_SetupFailure,
+    RK_Unknown
   };
 
   static const char* ResultKindToString(ResultKind RK) {
-#define CASE(K) case K: return #K
+#define CASE(K)                                                                \
+  case K:                                                                      \
+    return #K
     switch (RK) {
-    CASE(RK_MatchFailure);
-    CASE(RK_DidNotDie);
-    CASE(RK_SetupFailure);
-    CASE(RK_MatchFound);
-    CASE(RK_Unknown);
+      CASE(RK_MatchFailure);
+      CASE(RK_DidNotDie);
+      CASE(RK_SetupFailure);
+      CASE(RK_MatchFound);
+      CASE(RK_Unknown);
     }
     return "not a result kind";
   }
@@ -140,14 +152,14 @@ struct DeathTest {
     return val >= RK_DidNotDie && val <= RK_Unknown;
   }
 
-  TEST_NORETURN static void DeathTestDebugHandler(std::__libcpp_debug_info const& info) {
+  TEST_NORETURN static void
+  DeathTestDebugHandler(std::__libcpp_debug_info const& info) {
     assert(!GlobalMatcher().empty());
     if (GlobalMatcher().Matches(info)) {
       std::exit(RK_MatchFound);
     }
     std::exit(RK_MatchFailure);
   }
-
 
   DeathTest(DebugInfoMatcher const& Matcher) : matcher_(Matcher) {}
 
@@ -159,7 +171,7 @@ struct DeathTest {
     assert(pipe_res != -1 && "failed to create pipe");
     pid_t child_pid = fork();
     assert(child_pid != -1 &&
-        "failed to fork a process to perform a death test");
+           "failed to fork a process to perform a death test");
     child_pid_ = child_pid;
     if (child_pid_ == 0) {
       RunForChild(std::forward<Func>(f));
@@ -171,6 +183,7 @@ struct DeathTest {
   int getChildExitCode() const { return exit_code_; }
   std::string const& getChildStdOut() const { return stdout_from_child_; }
   std::string const& getChildStdErr() const { return stderr_from_child_; }
+
 private:
   template <class Func>
   TEST_NORETURN void RunForChild(Func&& f) {
@@ -231,21 +244,14 @@ private:
   DeathTest(DeathTest const&) = delete;
   DeathTest& operator=(DeathTest const&) = delete;
 
-  int GetStdOutReadFD() const {
-    return stdout_pipe_fd_[0];
-  }
+  int GetStdOutReadFD() const { return stdout_pipe_fd_[0]; }
 
-  int GetStdOutWriteFD() const {
-    return stdout_pipe_fd_[1];
-  }
+  int GetStdOutWriteFD() const { return stdout_pipe_fd_[1]; }
 
-  int GetStdErrReadFD() const {
-    return stderr_pipe_fd_[0];
-  }
+  int GetStdErrReadFD() const { return stderr_pipe_fd_[0]; }
 
-  int GetStdErrWriteFD() const {
-    return stderr_pipe_fd_[1];
-  }
+  int GetStdErrWriteFD() const { return stderr_pipe_fd_[1]; }
+
 private:
   DebugInfoMatcher matcher_;
   pid_t child_pid_ = -1;
@@ -257,7 +263,8 @@ private:
 };
 
 template <class Func>
-inline bool ExpectDeath(const char* stmt, Func&& func, DebugInfoMatcher Matcher) {
+inline bool ExpectDeath(const char* stmt, Func&& func,
+                        DebugInfoMatcher Matcher) {
   DeathTest DT(Matcher);
   DeathTest::ResultKind RK = DT.Run(func);
   auto OnFailure = [&](const char* msg) {
@@ -281,11 +288,11 @@ inline bool ExpectDeath(const char* stmt, Func&& func, DebugInfoMatcher Matcher)
   case DeathTest::RK_SetupFailure:
     return OnFailure("child failed to setup test environment");
   case DeathTest::RK_Unknown:
-      return OnFailure("reason unknown");
+    return OnFailure("reason unknown");
   case DeathTest::RK_DidNotDie:
-      return OnFailure("child did not die");
+    return OnFailure("child did not die");
   case DeathTest::RK_MatchFailure:
-      return OnFailure("matcher failed");
+    return OnFailure("matcher failed");
   }
 }
 
@@ -295,8 +302,11 @@ inline bool ExpectDeath(const char* stmt, Func&& func) {
 }
 
 /// Assert that the specified expression throws a libc++ debug exception.
-#define EXPECT_DEATH(...) assert((ExpectDeath(#__VA_ARGS__, [&]() { __VA_ARGS__; } )))
+#define EXPECT_DEATH(...)                                                      \
+  assert((ExpectDeath(#__VA_ARGS__, [&]() { __VA_ARGS__; })))
 
-#define EXPECT_DEATH_MATCHES(Matcher, ...) assert((ExpectDeath(#__VA_ARGS__, [&]() { __VA_ARGS__; }, Matcher)))
+#define EXPECT_DEATH_MATCHES(Matcher, ...)                                     \
+  assert((ExpectDeath(                                                         \
+      #__VA_ARGS__, [&]() { __VA_ARGS__; }, Matcher)))
 
 #endif // TEST_SUPPORT_DEBUG_MODE_HELPER_H

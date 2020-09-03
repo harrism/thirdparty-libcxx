@@ -10,14 +10,13 @@
 
 #include <complex.h>
 
-#ifndef _LIBCPP_VERSION
-#error _LIBCPP_VERSION not defined
+#ifndef _LIBCUDACXX_VERSION
+#error _LIBCUDACXX_VERSION not defined
 #endif
 
-int main(int, char**)
-{
-    std::complex<double> d;
-    (void)d;
+int main(int, char**) {
+  std::complex<double> d;
+  (void)d;
 
   return 0;
 }
